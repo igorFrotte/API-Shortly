@@ -5,5 +5,6 @@ import { validToken } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 router.post("/urls/shorten", validToken, urlController.short);
+router.get("/urls/:id", urlController.getShort);
 
 export default router;

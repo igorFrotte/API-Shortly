@@ -35,8 +35,23 @@ const short = async (req, res) => {
     } 
 };
 
-const f1 = async (req, res) => {
+const getShort = async (req, res) => {
+    const id = req.params.id;
 
+    try {    
+        const url = await connection.query(
+            'SELECT id, "shortUrl", url FROM urls WHERE id = $1;',
+            [id]
+        );
+
+        if (!url.rows[0]) {
+           return res.status(404).send(); 
+        }
+
+        return res.status(200).send(url.rows[0]);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 };
 
 const f2 = async (req, res) => {
@@ -55,4 +70,4 @@ const f5 = async (req, res) => {
 
 };
 
-export { short };
+export { short, getShort };
