@@ -6,7 +6,7 @@ const short = async (req, res) => {
     const { url } = req.body;
     const validation = urlSchema.validate(req.body);
 
-    if (validation.error) {
+    if(validation.error) {
         const errors = validation.error.details.map(detail => detail.message);
         return res.status(422).send(errors);
     }
@@ -16,7 +16,7 @@ const short = async (req, res) => {
 	    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+'(\\?[;&a-z\\d%_.~+=-]*)?'+'(\\#[-a-z\\d_]*)?$','i'
     );
 
-    if (!urlTester.test(url)) {
+    if(!urlTester.test(url)) {
         return res.status(422).send('URL inválida!');
     } 
 
@@ -44,7 +44,7 @@ const getShort = async (req, res) => {
             [id]
         );
 
-        if (!url.rows[0]) {
+        if(!url.rows[0]) {
            return res.status(404).send(); 
         }
 
@@ -63,7 +63,7 @@ const redirect = async (req, res) => {
             [shortUrl]
         );
 
-        if (!url.rows[0]) {
+        if(!url.rows[0]) {
             return res.status(404).send();  
         }
 
@@ -80,8 +80,38 @@ const redirect = async (req, res) => {
     }
 };
 
-const f3 = async (req, res) => {
+const delet = async (req, res) => {
+    const { userId } = res.locals;
+    const id = req.params.id;
+    
+    try {
+        const existURL = await connection.query(
+            'SELECT id FROM urls WHERE id = $1;',
+            [id]
+        );
 
+        if(!existURL.rows[0]) {
+            return res.status(404).send();
+        }
+
+        const url = await connection.query(
+            'SELECT id FROM urls WHERE id = $1 AND "userId" = $2;',
+            [id, userId]
+        );
+
+        if(!url.rows[0]) {
+            return res.status(401).send(); 
+        } 
+
+        await connection.query(
+            'DELETE FROM urls WHERE id = $1',
+            [url.rows[0].id]
+        )
+
+        return res.status(204).send();
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 };
 
 const f4 = async (req, res) => {
@@ -92,4 +122,4 @@ const f5 = async (req, res) => {
 
 };
 
-export { short, getShort, redirect };
+export { short, getShort, redirect, delet };
