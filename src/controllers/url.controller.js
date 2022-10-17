@@ -54,8 +54,30 @@ const getShort = async (req, res) => {
     }
 };
 
-const f2 = async (req, res) => {
+const redirect = async (req, res) => {
+    const { shortUrl } = req.params;
 
+    try {
+        const url= await connection.query(
+            'SELECT id, url, "visitCount" FROM urls WHERE "shortUrl" = $1;',
+            [shortUrl]
+        );
+
+        if (!url.rows[0]) {
+            return res.status(404).send();  
+        }
+
+        const upCount = url.rows[0].visitCount + 1;
+
+        await connection.query(
+            'UPDATE urls SET "visitCount" = $1 WHERE id = $2;',
+            [upCount, url.rows[0].id]
+        );
+
+        return res.redirect(url.rows[0].url);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 };
 
 const f3 = async (req, res) => {
@@ -70,4 +92,4 @@ const f5 = async (req, res) => {
 
 };
 
-export { short, getShort };
+export { short, getShort, redirect };
