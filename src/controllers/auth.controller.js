@@ -26,7 +26,7 @@ const signIn = async (req, res) => {
         userId,
     }, process.env.TOKEN_SECRET,
     {
-        expiresIn: "2h"
+        expiresIn: "4h"
     });
 
     await connection.query(

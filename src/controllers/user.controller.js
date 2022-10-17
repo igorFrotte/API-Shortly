@@ -10,7 +10,7 @@ const listUser = async (req, res) => {
         );
 
         const count = await connection.query(
-            'SELECT COUNT("visitCount") as counter from urls WHERE "userId" = $1;',
+            'SELECT SUM("visitCount") as counter from urls WHERE "userId" = $1;',
             [userId]
         );
 
