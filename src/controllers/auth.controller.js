@@ -40,6 +40,4 @@ const signIn = async (req, res) => {
   }
 };
 
-const token = (req, res) => res.status(200).send();
-
-export { signUp, signIn, token };
+export { signUp, signIn };

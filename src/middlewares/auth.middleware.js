@@ -76,7 +76,7 @@ async function validToken (req, res, next) {
 
         next();
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(401).send(error.message);
     }
 }
 
