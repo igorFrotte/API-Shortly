@@ -5,5 +5,6 @@ import { validToken } from "../middlewares/auth.middleware.js";
 const router = express.Router();
 
 router.get("/users/me", validToken, userController.listUser);
+router.get("/ranking", userController.rank);
 
 export default router;
