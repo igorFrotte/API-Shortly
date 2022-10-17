@@ -69,10 +69,11 @@ async function validToken (req, res, next) {
         const user = await connection.query('SELECT * FROM users WHERE id = $1;', [decode.userId]); 
 
         if (!user.rows[0]) {
-            return res.status(401).send();
+            return res.status(404).send();
         }
 
         res.locals.userId = decode.userId;
+        res.locals.userName = user.rows[0].name;
 
         next();
     } catch (error) {

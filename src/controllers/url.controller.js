@@ -114,12 +114,4 @@ const delet = async (req, res) => {
     }
 };
 
-const f4 = async (req, res) => {
-
-};
-
-const f5 = async (req, res) => {
-
-};
-
 export { short, getShort, redirect, delet };

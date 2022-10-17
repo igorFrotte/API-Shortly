@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import authRouter from './routers/auth.routers.js';
 import urlRouter from './routers/url.routers.js';
+import userRouter from './routers/user.routers.js';
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use(authRouter);
 app.use(urlRouter);
+app.use(userRouter);
 
 // Route for testing app
 app.get('/status', (req, res) => {
